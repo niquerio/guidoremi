@@ -2,7 +2,7 @@
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'spec_helper'
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -19,8 +19,8 @@ require 'rspec/rails'
 # of increasing the boot-up time by auto-requiring all files in the support
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
-#
- Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+ 
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -69,5 +69,34 @@ RSpec.configure do |config|
   end
   config.after(:each) do
     DatabaseCleaner.clean
+  end
+end
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    # Choose a test framework:
+    with.test_framework :rspec
+
+    # Choose one or more libraries:
+    # Or, choose the following (which implies all of the above):
+    with.library :rails
+  end
+end
+module Shoulda
+  module Matchers
+    RailsShim.class_eval do
+      def self.serialized_attributes_for(model)
+        if defined?(::ActiveRecord::Type::Serialized)
+          # Rails 5+
+          model.columns.select do |column|
+            model.type_for_attribute(column.name).is_a?(::ActiveRecord::Type::Serialized)
+          end.inject({}) do |hash, column|
+            hash[column.name.to_s] = model.type_for_attribute(column.name).coder
+            hash
+          end
+        else
+          model.serialized_attributes
+        end
+      end
+    end
   end
 end
