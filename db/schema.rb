@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20161010184319) do
 
   create_table "choices", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "multiple_choice_question_id"
+    t.string   "midi"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.index ["multiple_choice_question_id"], name: "index_choices_on_multiple_choice_question_id", using: :btree
@@ -33,6 +34,7 @@ ActiveRecord::Schema.define(version: 20161010184319) do
 
   create_table "multiple_choice_questions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "question_generator_id"
+    t.string   "prompt"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
     t.index ["question_generator_id"], name: "index_multiple_choice_questions_on_question_generator_id", using: :btree

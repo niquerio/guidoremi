@@ -1,6 +1,7 @@
 namespace :init_db do
   task reset: :environment do
-    Rake::Task['db:reset'].invoke
+    Rake::Task['db:drop'].invoke
+    Rake::Task['db:create'].invoke
     Rake::Task['db:migrate'].invoke
     Rake::Task['db:seed'].invoke
   end
