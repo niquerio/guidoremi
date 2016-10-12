@@ -36,6 +36,7 @@ class IntervalQuestionGenerator < QuestionGenerator
         Answer.create(user: user, correct_answer: c.id, question: question)
       end
     end
+    return question
   end
 
   def note2num(note)
