@@ -1,11 +1,22 @@
 FactoryGirl.define do
+  factory :skill do
+    name "So-Mi"
+    tree
+  end
+  factory :tree do
+    level 1
+    order 1
+  end
   sequence :email do |n|
     "person#{n}@example.com"
   end
   params = { prompt: 'What is the Answer' }
   factory :interval_question_generator do
+    slug 'slug'
     name 'name'
     parameters params
+    order 1
+    skill
   end
   factory :choice do
     multiple_choice_question
@@ -14,8 +25,11 @@ FactoryGirl.define do
     question_generator
   end
   factory :question_generator do
+    slug 'slug'
     name 'MyString'
     parameters 'MyText'
+    order 1
+    skill
   end
   factory :user do
     email { generate(:email) }

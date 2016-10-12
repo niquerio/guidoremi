@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161010184319) do
+ActiveRecord::Schema.define(version: 20161012230707) do
 
   create_table "answers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -46,6 +46,26 @@ ActiveRecord::Schema.define(version: 20161010184319) do
     t.string   "type"
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.integer  "order"
+    t.integer  "skill_id"
+    t.string   "slug"
+    t.index ["skill_id"], name: "index_question_generators_on_skill_id", using: :btree
+  end
+
+  create_table "skills", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.string   "notes"
+    t.integer  "tree_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tree_id"], name: "index_skills_on_tree_id", using: :btree
+  end
+
+  create_table "trees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "level"
+    t.integer  "order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -79,4 +99,5 @@ ActiveRecord::Schema.define(version: 20161010184319) do
   add_foreign_key "answers", "users"
   add_foreign_key "choices", "multiple_choice_questions"
   add_foreign_key "multiple_choice_questions", "question_generators"
+  add_foreign_key "skills", "trees"
 end

@@ -1,0 +1,21 @@
+- name: So Mi
+  slug: so-mi
+  qg:
+  - so-mi-1
+  - so-mi-2
+  - so-mi-3
+  notes:
+- name: So La 
+  slug: so-la
+  qg:
+  - so-la-1
+  - so-la-2
+  - so-la-3
+  notes:
+- name: Mi La
+  slug: mi-la
+  qg:
+  - mi-la-1
+  - mi-la-2
+  - mi-la-3
+  notes:
