@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :skill do
     name "So-Mi"
     tree
+    slug 'slug'
   end
   factory :tree do
     level 1
@@ -15,7 +16,6 @@ FactoryGirl.define do
     slug 'slug'
     name 'name'
     parameters params
-    order 1
     skill
   end
   factory :choice do
@@ -28,7 +28,6 @@ FactoryGirl.define do
     slug 'slug'
     name 'MyString'
     parameters 'MyText'
-    order 1
     skill
   end
   factory :user do
