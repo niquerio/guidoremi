@@ -17,6 +17,8 @@ gem 'puma', '~> 3.0'
 gem 'devise_token_auth'
 gem 'omniauth'
 gem 'midilib'
+gem 'foreman'
+gem 'rack-cors'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
