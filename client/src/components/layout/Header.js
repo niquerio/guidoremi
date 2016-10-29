@@ -1,4 +1,5 @@
 import React from 'react';
+import UserNav from './UserNav';
 import { Link } from "react-router";
 import { Nav, Navbar, NavItem  } from 'react-bootstrap';
 
@@ -16,6 +17,7 @@ export default class Header extends React.Component{
         <Nav>
           <NavItem>About</NavItem>
         </Nav>
+      <UserNav authenticated={this.props.authenticated}/>
       </Navbar.Collapse>
     </Navbar>
     )

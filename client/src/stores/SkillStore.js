@@ -43,6 +43,6 @@ class SkillStore extends EventEmitter{
   }
 }
 
-const skillStore = new SkillStore
+const skillStore = new SkillStore()
 
 export default skillStore;

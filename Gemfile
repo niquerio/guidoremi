@@ -19,6 +19,7 @@ gem 'omniauth'
 gem 'midilib'
 gem 'foreman'
 gem 'rack-cors'
+gem 'jbuilder'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

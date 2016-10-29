@@ -1,6 +1,6 @@
 import React from "react";
-import Branch from "../components/tree/Branch";
-import TreeStore from "../stores/TreeStore";
+import Branch from "./Branch";
+import TreeStore from "../../stores/TreeStore";
 import Auth from 'j-toker';
 
 export default class Tree extends React.Component {
