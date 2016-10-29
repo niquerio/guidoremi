@@ -64,7 +64,7 @@ RSpec.describe IntervalQuestionGenerator, 'make_question' do
       iqg.make_question(user)
       c = Choice.find(Answer.first.correct_answer) 
       notes = note_on(c.midi)
-      expect(notes[1] - notes[0]).to eq(params[:interval])
+      expect(notes[1] - notes[0]).to eq(params["interval"])
     end
     it 'incorrect choice has appopriate interval' do
       iqg, user, params = setup_so_mi.values_at(:iqg, :user, :params)
@@ -73,7 +73,7 @@ RSpec.describe IntervalQuestionGenerator, 'make_question' do
       Choice.all.each do |c|
         unless c.id == correct_id.to_i
           notes = note_on(c.midi)
-          expect(params[:other_intervals]).to  include(notes[1]-notes[0])
+          expect(params["other_intervals"]).to  include(notes[1]-notes[0])
         end
       end
        
@@ -86,7 +86,7 @@ RSpec.describe IntervalQuestionGenerator, 'make_question' do
     end
     it 'generates all potential incorrect intervals are covered and are appropriate' do
       iqg, user, params = setup_so_mi.values_at(:iqg, :user, :params)
-      intervals_not_covered = params[:other_intervals].dup
+      intervals_not_covered = params["other_intervals"].dup
       (0..100).each do
         q = iqg.make_question(user)
         id = q.answer.correct_answer.to_i
@@ -94,7 +94,7 @@ RSpec.describe IntervalQuestionGenerator, 'make_question' do
           unless c.id == id
             notes = note_on(c.midi)
             wrong_interval = notes[1] - notes[0]
-            expect(params[:other_intervals]).to include(wrong_interval)
+            expect(params["other_intervals"]).to include(wrong_interval)
             intervals_not_covered.delete wrong_interval
           end
         end
@@ -104,9 +104,9 @@ RSpec.describe IntervalQuestionGenerator, 'make_question' do
     end
     def setup_so_mi
       user = create(:user)
-      params = { range: %w(c3 c5), num_choices: 2, interval: -3,
-                 other_intervals: [0, -1, -5, -6, -7, -8, -9, -10, -12],
-                 prompt: 'Which is So Mi?', same_start: true }
+      params = { "range" => %w(c3 c5), "num_choices"=> 2, "interval"=> -3,
+                 "other_intervals"=> [0, -1, -5, -6, -7, -8, -9, -10, -12],
+                 "prompt"=> 'Which is So Mi?', "same_start"=> true }
       iqg = create(:interval_question_generator, name: 'so-mi-1', parameters: params)
       { user: user, iqg: iqg, params: params }
     end
@@ -114,7 +114,7 @@ RSpec.describe IntervalQuestionGenerator, 'make_question' do
   describe 'other situations' do
     it 'has more than 2 choices' do
       user, params = setup_params.values_at(:user, :params)
-      params[:num_choices] = 5
+      params["num_choices"] = 5
      
       iqg = create(:interval_question_generator, name: 'other', parameters: params)
       
@@ -123,7 +123,7 @@ RSpec.describe IntervalQuestionGenerator, 'make_question' do
     end
     it 'if same_start false, first notes are not the same' do
       user, params = setup_params.values_at(:user, :params)
-      params[:same_start] = false
+      params["same_start"] = false
       iqg = create(:interval_question_generator, name: 'other', parameters: params)
       iqg.make_question(user)
       start_notes = []
@@ -134,9 +134,9 @@ RSpec.describe IntervalQuestionGenerator, 'make_question' do
     end
     def setup_params
       user = create(:user)
-      params = { range: %w(c3 c5), num_choices: 5, interval: -3,
-                 other_intervals: [0, -1, -5, -6, -7, -8, -9, -10, -12],
-                 prompt: 'Which is So Mi?', same_start: true }
+      params = { "range" => %w(c3 c5), "num_choices"=> 5, "interval"=> -3,
+                 "other_intervals"=> [0, -1, -5, -6, -7, -8, -9, -10, -12],
+                 "prompt"=> 'Which is So Mi?', "same_start"=> true }
       return {user: user, params: params}
     end
   end

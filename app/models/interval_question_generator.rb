@@ -7,7 +7,7 @@ include MIDI
 class IntervalQuestionGenerator < QuestionGenerator
   def make_question(user)
     range, num_choices, interval,
-    other_intervals, prompt, same_start = parameters.values_at(:range, :num_choices, :interval, :other_intervals, :prompt, :same_start)
+    other_intervals, prompt, same_start = parameters.values_at("range", "num_choices", "interval", "other_intervals", "prompt", "same_start")
 
     question = MultipleChoiceQuestion.create(prompt: prompt, question_generator: self)
 
