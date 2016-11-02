@@ -38,6 +38,8 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    acts_as_tree (2.5.1)
+      activerecord (>= 3.0.0)
     arel (7.1.2)
     ast (2.3.0)
     bcrypt (3.1.11)
@@ -185,6 +187,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts_as_tree
   byebug
   database_cleaner
   devise_token_auth
@@ -204,6 +207,9 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
+
+RUBY VERSION
+   ruby 2.3.0p0
 
 BUNDLED WITH
    1.13.1

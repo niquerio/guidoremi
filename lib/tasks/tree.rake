@@ -30,11 +30,12 @@ namespace :tree do
   task reset_tree: :environment do
     Tree.delete_all
     tree = CSV.read('lib/seeds/tree.csv')
+    root = Tree.create(level: 0)
     tree.each_with_index do |branch, level|
+      b = root.children.create(level: level)
       branch.each_with_index do |leaf, order|
-        t = Tree.create(level: level, order: order)
         skill = Skill.find_by(slug: leaf)
-        skill.update(tree: t)
+        t = b.children.create(level: order, skill: skill)
       end
     end
     

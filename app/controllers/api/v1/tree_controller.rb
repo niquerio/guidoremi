@@ -1,7 +1,8 @@
 module Api
-  module v1
+  module V1
     class TreeController < ApplicationController
       def index
+        @tree = Tree.root.children
       end
     end
   end

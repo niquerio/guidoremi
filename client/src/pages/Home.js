@@ -21,7 +21,7 @@ export default class Home extends React.Component {
         self.setState({
           authenticated: true
         })
-      }.bind(this))
+      })
       .fail(function() {
         self.setState({
           authenticated: false

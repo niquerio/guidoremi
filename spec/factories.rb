@@ -1,12 +1,11 @@
 FactoryGirl.define do
-  factory :skill do
-    name "So-Mi"
-    tree
-    slug 'slug'
-  end
   factory :tree do
     level 1
-    order 1
+    skill
+  end
+  factory :skill do
+    name "So-Mi"
+    slug 'slug'
   end
   sequence :email do |n|
     "person#{n}@example.com"

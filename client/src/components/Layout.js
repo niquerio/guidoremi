@@ -17,7 +17,6 @@ export default class Layout extends React.Component{
     PubSub.unsubscribe('auth.signOut.success', this.getAuth);
   }
   getAuth(ev, user){
-    console.log('should remove button')
     if(user.signedIn){
       this.setState({
         authenticated: true
