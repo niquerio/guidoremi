@@ -1,9 +1,15 @@
 import React from 'react';
 import Auth from 'j-toker';
+import { withRouter } from "react-router";
+import * as UserActions from '../../actions/UserActions'
 
-export default class UserNav extends React.Component{
+class UserNav extends React.Component{
   handleSignOut(){
     Auth.signOut();
+    UserActions.signOutUser();
+
+    this.props.router.push('/')
+    
   }
   render(){
     if(this.props.authenticated) {
@@ -17,3 +23,4 @@ export default class UserNav extends React.Component{
     }
   }
 }
+export default withRouter(UserNav) 

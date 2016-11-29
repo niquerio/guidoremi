@@ -1,20 +1,19 @@
 import React from 'react';
 import Header from './layout/Header';
-import PubSub from 'pubsub-js'
+import UserStore from '../stores/UserStore';
 
 export default class Layout extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {authenticated: false};
-    this.getAuth = this.getAuth.bind(this);
+    
+    this.state = {authenticated: UserStore.signedIn()};
   }
   componentWillMount(){
-    PubSub.subscribe('auth.validation.success', this.getAuth); 
-    PubSub.subscribe('auth.signOut.success', this.getAuth); 
+    UserStore.on("change", () => {
+      this.setState({authenticated: UserStore.signedIn()});      
+    });
   }
   componentWillUnmount(){
-    PubSub.unsubscribe('auth.validation.success');
-    PubSub.unsubscribe('auth.signOut.success', this.getAuth);
   }
   getAuth(ev, user){
     if(user.signedIn){
@@ -33,7 +32,7 @@ export default class Layout extends React.Component{
     };
     return(
       <div>
-        <Header authenticated={this.state.authenticated}/>
+        <Header router={this.props.router} authenticated={this.state.authenticated}/>
         <div className="container" style={containerStyle}> 
           {this.props.children}
         </div>

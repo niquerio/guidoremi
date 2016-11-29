@@ -2,6 +2,7 @@ import React from "react";
 import Skill from '../components/skills/Skill';
 
 import SkillStore from "../stores/SkillStore";
+
 export default class Skills extends React.Component {
   constructor(){
     super();
@@ -10,7 +11,7 @@ export default class Skills extends React.Component {
     };
   }
   componentWillMount(){
-    this.setState({skill: SkillStore.getSkill(this.props.params.skill)})
+      this.setState({skill: SkillStore.getSkill(this.props.params.skill)})
   }
   render() {
     const {name} = this.state.skill

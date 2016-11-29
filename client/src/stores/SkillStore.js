@@ -1,48 +1,41 @@
 import {EventEmitter} from "events";
+import dispatcher from '../dispatcher';
+import * as SkillActions from  '../actions/SkillActions'
 
 class SkillStore extends EventEmitter{
   constructor(){
     super();
-    this.skills = 
-      { 
-        'so-mi': 
-          {
-            name: 'So Mi',
-            question_generators: 
-              [ 
-                {slug: 'so-mi-1', name: 'So Mi Level 1'},
-                {slug: 'so-mi-2', name: 'So Mi Level 2'},
-                {slug: 'so-mi-3', name: 'So Mi Level 3'},
-              ],
-          },
-        'so-la': 
-          {
-            name: 'So La',
-            question_generators: 
-            [ 
-              {slug: 'so-la-1', name: 'So La Level 1'},
-              {slug: 'so-la-2', name: 'So La Level 2'},
-              {slug: 'so-la-3', name: 'So La Level 3'},
-            ],
-          },
-        'mi-la': 
-          {
-            name: 'Mi La',
-            question_generators: 
-            [ 
-              {slug: 'mi-la-1', name: 'Mi La Level 1'},
-              {slug: 'mi-la-2', name: 'Mi La Level 2'},
-              {slug: 'mi-la-3', name: 'Mi La Level 3'},
-            ],
-          }
-    }  
+    this.skills = []
+    console.log('getting skills')
+    SkillActions.getSkills()
   }
 
   getSkill(slug) {
-    return this.skills[slug]
+    console.log('blah')
+    var s = null;
+    for (var i = 0; i < this.skills.length; i++){
+      if(this.skills[i].slug === slug){
+        s = this.skills[i]
+        break;
+      }
+    }
+    return s;
+  }
+  handleActions(action){
+    switch(action.type){
+      case "RECEIVE_SKILLS": {
+        this.skills = action.skills
+        this.emit("change")
+        break
+      }
+      default: {
+        break
+      }
+    }
   }
 }
 
 const skillStore = new SkillStore()
+dispatcher.register(skillStore.handleActions.bind(skillStore));
 
 export default skillStore;
