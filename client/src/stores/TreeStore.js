@@ -13,6 +13,8 @@ class TreeStore extends EventEmitter{
       self._reloadTree(); 
     });
   }
+
+//Private Functions
   _reloadTree() {
     if(UserStore.signedIn()){
       TreeActions.getTree()
@@ -21,10 +23,13 @@ class TreeStore extends EventEmitter{
       this.tree = []
     }
   } 
+
+//Public Functions
   getTree() {
     return this.tree
   }
 
+//Handle Dispatched Actions
   handleActions(action){
     switch(action.type){
       case "RECEIVE_TREE": {
@@ -37,6 +42,7 @@ class TreeStore extends EventEmitter{
       }
     }
   }
+
 }
 
 const treeStore = new TreeStore()

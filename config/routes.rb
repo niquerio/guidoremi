@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'tree', to: 'tree#index' 
       get 'skills', to: 'skills#index' 
+      post 'question_generators/:slug', to: 'question_generators#create' 
     end
   end 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

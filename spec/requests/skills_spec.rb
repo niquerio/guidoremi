@@ -6,7 +6,6 @@ describe 'Get /api/v1/skills' do
     skill = create(:skill, name: 'Skill Name', slug: 'skill_slug')
     qg = create(:question_generator, skill: skill, name: 'So Mi Level 1')
     get '/api/v1/skills', headers: header
-    byebug
     expect(response).to have_http_status(:success)
     expect(response.body).to include('Skill Name')
     expect(response.body).to include('So Mi Level 1')
