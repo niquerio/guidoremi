@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       get 'tree', to: 'tree#index' 
       get 'skills', to: 'skills#index' 
       post 'question_generators/:slug', to: 'question_generators#create' 
+      put 'questions/:id/answer', to: 'answers#update'
     end
   end 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

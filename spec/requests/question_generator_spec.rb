@@ -4,17 +4,15 @@ describe 'POST /api/v1/question_generator' do
     iqg, user, params = setup_so_mi.values_at(:iqg, :user, :params)
     header = user.create_new_auth_token
     post '/api/v1/question_generators/so-mi-1', headers: header
-    byebug
     expect(response).to have_http_status(:success)
     expect(response.body).to include('prompt')
     expect(response.body).to include('data:;base64,')
   end
-  #it 'errors without auth token' do
-  #  skill = create(:skill, name: 'Skill Name', slug: 'skill_slug')
-  #  qg = create(:question_generator, skill: skill, name: 'So Mi Level 1')
-  #  #get '/api/v1/question_generator'
-  #  #expect(response).to have_http_status(:unauthorized)
-  #end
+  it 'errors without auth token' do
+    iqg, user, params = setup_so_mi.values_at(:iqg, :user, :params)
+    post '/api/v1/question_generators/so-mi-1' 
+    expect(response).to have_http_status(:unauthorized)
+  end
 
   def setup_so_mi
     user = create(:user, name: 'Martin')

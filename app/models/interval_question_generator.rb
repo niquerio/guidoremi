@@ -23,7 +23,9 @@ class IntervalQuestionGenerator < QuestionGenerator
     highest_starting_note -= intervals.max if intervals.max > 0
 
     starting_note = rand(lowest_starting_note..highest_starting_note) if same_start
-    intervals.shuffle.each do |i|
+
+    alph = ('A'..'Z').to_a
+    intervals.shuffle.each_with_index do |i, index|
       blob = ''
       if same_start
         blob = generate_midi([starting_note, starting_note + i])
@@ -31,7 +33,7 @@ class IntervalQuestionGenerator < QuestionGenerator
         start = rand(lowest_starting_note..highest_starting_note)
         blob = generate_midi([start, start + i])
       end
-      c = Choice.create(multiple_choice_question: question, midi: blob)
+      c = Choice.create(multiple_choice_question: question, midi: blob, name: alph[index])
       if i == interval
         Answer.create(user: user, correct_answer: c.id, question: question)
       end
