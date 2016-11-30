@@ -6,9 +6,23 @@ import Auth from 'j-toker';
 export default class Tree extends React.Component {
   constructor(){
     super();
+    this.getTree = this.getTree.bind(this);
     this.state = {
       tree: TreeStore.getTree(),
     };
+  }
+  componentWillMount(){
+    TreeStore.on("change", this.getTree ) 
+  }
+
+  componentWillUnmount(){
+    TreeStore.removeListener("change", this.getTree) 
+  }
+
+  getTree(){
+    this.setState({
+      tree: TreeStore.getTree(),
+    });      
   }
   render() {
     window.Auth = Auth;

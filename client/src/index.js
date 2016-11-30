@@ -18,14 +18,6 @@ Auth.configure({
 });
 
 
-function requireAuth(nextState, replace){
-  if(!UserStore.signedIn()){    
-    replace({
-      pathname: '/sign_in',
-      state: {nextPathname: nextState.location.pathname }
-    })
-  };
-}
 
 var firstValidate = false;
 PubSub.subscribe('auth.validation.success',function(ev, user){
@@ -42,6 +34,15 @@ PubSub.subscribe('auth.validation.error',function(ev, error){
   }
 });
 
+function requireAuth(nextState, replace){
+  if(!UserStore.signedIn()){    
+    replace({
+      pathname: '/sign_in',
+      state: {nextPathname: nextState.location.pathname }
+    })
+  };
+}
+
 function homeAuth(nextState, replace){
   if(UserStore.signedIn()){    
     replace({
@@ -57,7 +58,7 @@ function renderDom(){
     <Router history={hashHistory}>
         <Route path="/" component={Layout}>
           <IndexRoute component={Home} onEnter={homeAuth}></IndexRoute>
-          <Route path="/sign_in" name="sign_in" component={SignIn} />
+          <Route path="/sign_in" name="sign_in" component={SignIn} onEnter={homeAuth} />
           <Route path="/skills/:skill" name="skills" component={Skills} onEnter={requireAuth}></Route>
           <Route path="/tree" name="tree" component={Tree} onEnter={requireAuth}></Route>
           

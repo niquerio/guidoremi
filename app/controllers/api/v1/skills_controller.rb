@@ -1,6 +1,6 @@
 module Api
   module V1
-    class SkillsController < ApplicationController
+    class SkillsController < ApiController
       def index
         @skills = Skill.all
       end

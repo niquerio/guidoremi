@@ -11,7 +11,7 @@
   "dependencies": {
     "flux": "^3.1.0",
     "history": "^4.3.0",
-    "j-toker": "0.0.10-beta3",
+    "j-toker": "git://github.com/jclif/j-toker",
     "jquery": "^3.1.1",
     "lodash": "^4.16.4",
     "react": "^15.3.2",

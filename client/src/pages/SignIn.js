@@ -4,7 +4,6 @@ import _ from 'lodash';
 import { withRouter } from "react-router";
 import { Row, Col, Button } from 'react-bootstrap';
 import FieldGroup from '../components/sign_in/FieldGroup';
-import * as UserActions from '../actions/UserActions';
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -31,13 +30,11 @@ class SignIn extends React.Component {
           email: '',
           password: '',
       }); 
-      UserActions.getUser(); 
       self.props.router.push('/')
     })
   }
 
   render() {
-    window.Auth = Auth
     return(
     <div>
       <Row>

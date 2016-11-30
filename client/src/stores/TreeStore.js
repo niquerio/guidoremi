@@ -1,14 +1,26 @@
 import {EventEmitter} from "events";
 import dispatcher from '../dispatcher';
+import UserStore from './UserStore';
 import * as TreeActions from  '../actions/TreeActions'
 
 class TreeStore extends EventEmitter{
   constructor(){
     super();
     this.tree = []
-    TreeActions.getTree()
+    this._reloadTree(); 
+    var self = this
+    UserStore.on("change", () => {
+      self._reloadTree(); 
+    });
   }
-
+  _reloadTree() {
+    if(UserStore.signedIn()){
+      TreeActions.getTree()
+    }
+    else{
+      this.tree = []
+    }
+  } 
   getTree() {
     return this.tree
   }
