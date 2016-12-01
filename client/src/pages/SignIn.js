@@ -30,7 +30,17 @@ class SignIn extends React.Component {
           email: '',
           password: '',
       }); 
-      self.props.router.push('/')
+      if (window.MIDI.Soundfont.acoustic_grand_piano){
+        self.props.router.push('/')
+      }else{
+        var new_self = self
+        window.MIDI.loadPlugin({
+          onsuccess: function(){
+            new_self.props.router.push('/')
+          }
+        });
+        
+      }
     })
   }
 

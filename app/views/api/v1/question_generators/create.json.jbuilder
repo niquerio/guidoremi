@@ -1,3 +1,4 @@
+json.id @question.id
 json.prompt @question.prompt
 json.choices do 
   json.array!(@question.choices) do |choice|

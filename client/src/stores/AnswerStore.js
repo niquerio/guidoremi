@@ -1,31 +1,30 @@
 import {EventEmitter} from "events";
+import dispatcher from '../dispatcher';
 
 class AnswerStore extends EventEmitter{
   constructor(){
     super();
-    this.answers = 
-      { 
-        'so-mi': 
-          {
-            correct_answer: 1,
-          },
-        'so-la': 
-          {
-            correct_answer: 3,
-          },
-        'mi-la': 
-          {
-            correct_answer: 6,
-          }
-    }  
+    this.answers = {}
   }
 
-  getCorrect(answer,slug) {
-    var correct = this.answers[slug.slice(0,-2)].correct_answer 
-    return { result: correct == answer, correct: correct}
+  getAnswer(){
+    return this.answer
+  }
+
+  handleActions(action){
+    switch(action.type){
+      case "RECEIVE_ANSWER": {
+        this.answer = action.answer
+        this.emit("change")
+        break
+      }
+      default: {
+        break
+      }
+    }
   }
 }
 
-const answerStore = new AnswerStore
-
+const answerStore = new AnswerStore()
+dispatcher.register(answerStore.handleActions.bind(answerStore));
 export default answerStore;

@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import Tree from './pages/Tree';
 import SignIn from './pages/SignIn';
 import Skills from './pages/Skills';
+import IntervalQuestion from './pages/IntervalQuestion';
 
 import UserStore from './stores/UserStore';
 import './index.css';
@@ -23,7 +24,11 @@ var firstValidate = false;
 PubSub.subscribe('auth.validation.success',function(ev, user){
   if(!firstValidate){
     firstValidate = true;
-    renderDom();
+    window.MIDI.loadPlugin({
+      onsuccess: function(){
+        renderDom();
+      }
+    });
   }
 });
 
@@ -60,6 +65,7 @@ function renderDom(){
           <IndexRoute component={Home} onEnter={homeAuth}></IndexRoute>
           <Route path="/sign_in" name="sign_in" component={SignIn} onEnter={homeAuth} />
           <Route path="/skills/:skill" name="skills" component={Skills} onEnter={requireAuth}></Route>
+          <Route path="/skills/:skill/:qg" name="qg" component={IntervalQuestion} onEnter={requireAuth}></Route>
           <Route path="/tree" name="tree" component={Tree} onEnter={requireAuth}></Route>
           
         </Route>

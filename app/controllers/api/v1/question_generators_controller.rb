@@ -3,7 +3,7 @@ module Api
     class QuestionGeneratorsController < ApiController
       def create
         user = User.find_by(uid: request.env['HTTP_UID'])
-        qg = QuestionGenerator.find_by(name: params['slug'])
+        qg = QuestionGenerator.find_by(slug: params['slug'])
         @question = qg.make_question(user)
       end
     end

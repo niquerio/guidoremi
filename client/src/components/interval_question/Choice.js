@@ -1,10 +1,11 @@
 import React from "react";
+import {Button} from 'react-bootstrap';
 
 export default class Choice extends React.Component {
   playMidi(){
-    MIDI.Player.loadFile(this.props.choice.midi, function(){
-      MIDI.Player.stop();
-      MIDI.Player.resume();
+    window.MIDI.Player.loadFile(this.props.choice.midi, function(){
+      window.MIDI.Player.stop();
+      window.MIDI.Player.resume();
     });
   }
   handleChange(e){
@@ -19,10 +20,10 @@ export default class Choice extends React.Component {
       position: 'relative',
     }
     return(
-    <label class="radio-inline">
-     <input onChange={this.handleChange.bind(this)} type="radio" style={inputStyle} name="choicesRadio" id={choice.id} value={choice.id} /> {choice.name}  <button onClick={this.playMidi.bind(this)} type="button"  class="btn btn-default btn-lg">
-  <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-</button>
+    <label className="radio-inline">
+     <input onChange={this.handleChange.bind(this)} type="radio" style={inputStyle} name="choicesRadio" id={choice.id} value={choice.id} /> {choice.name}  <Button onClick={this.playMidi.bind(this)} >
+  <span className="glyphicon glyphicon-play" aria-hidden="true"></span>
+</Button>
     </label> 
     )
   }

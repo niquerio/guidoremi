@@ -3,14 +3,14 @@ describe 'POST /api/v1/question_generator' do
   it 'shows appropriate question for given generator if authenticated' do
     iqg, user, params = setup_so_mi.values_at(:iqg, :user, :params)
     header = user.create_new_auth_token
-    post '/api/v1/question_generators/so-mi-1', headers: header
+    post '/api/v1/question_generators/slug', headers: header
     expect(response).to have_http_status(:success)
     expect(response.body).to include('prompt')
     expect(response.body).to include('data:;base64,')
   end
   it 'errors without auth token' do
     iqg, user, params = setup_so_mi.values_at(:iqg, :user, :params)
-    post '/api/v1/question_generators/so-mi-1' 
+    post '/api/v1/question_generators/slug' 
     expect(response).to have_http_status(:unauthorized)
   end
 
