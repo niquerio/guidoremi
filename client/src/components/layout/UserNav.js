@@ -5,7 +5,7 @@ import * as UserActions from '../../actions/UserActions'
 class UserNav extends React.Component{
   handleSignOut(){
     var self = this
-    UserActions.signOutUser().always(function(){
+    UserActions.signOutUser().then(function(){
       self.props.router.push('/')
     });
     

@@ -1,23 +1,14 @@
 import dispatcher from '../dispatcher';
-import $ from 'jquery'
-import * as TokenActions from './TokenActions'
-//import TokenStore from '../stores/TokenStore'
-import Cookies from 'js-cookie'
+import Axios from '../utilities/Axios';
 
 export function getNewQuestion(qg){
   dispatcher.dispatch({type: 'FETCHING_QUESTION'});
-  $.ajax({
-    url: '/api/v1/question_generators/'+qg,
-    type: 'POST',
-    dataType: 'json',
-    success: function(resp, status, request) { 
-      TokenActions.updateCookie(request);
+  Axios.post('/api/v1/question_generators/'+qg)
+    .then(function(resp){
       dispatcher.dispatch({type: "RECEIVE_QUESTION",
-        question: resp
+        question: resp.data
       })
-    },
-    headers: Cookies.getJSON('authHeaders'),
-  });
+    })
 }
 
 export function clear(){

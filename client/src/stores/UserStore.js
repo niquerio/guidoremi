@@ -1,20 +1,12 @@
 import {EventEmitter} from "events";
 //import * as UserActions from '../actions/UserActions'
 import dispatcher from '../dispatcher';
-import PubSub from 'pubsub-js';
 import _ from 'lodash'
 
 class UserStore extends EventEmitter{
   constructor(){
     super();
     this.user = {}
-    var self = this
-    PubSub.subscribe('auth.validation.success', function(ev, user) {
-      self.handleActions({
-        type: 'RECEIVE_USER',
-        user: user
-      });
-    });
   }
 
 

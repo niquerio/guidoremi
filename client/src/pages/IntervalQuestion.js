@@ -6,7 +6,8 @@ import * as QuestionActions from "../actions/QuestionActions";
 import Choice from "../components/interval_question/Choice";
 import * as AnswerActions from "../actions/AnswerActions";
 import AnswerStore from "../stores/AnswerStore";
-import $ from 'jquery'
+import _ from 'lodash'
+//import $ from 'jquery'
 
 export default class IntervalQuestion extends React.Component {
   constructor(){
@@ -82,11 +83,11 @@ export default class IntervalQuestion extends React.Component {
         if (this.state.result){
           result_text = 'Correct!'
         }else{
-          var correct_choice = $.grep(this.state.question.choices, 
+          var correct_choice = _.findIndex(choices, 
             function(e){ 
               return e.id === parseInt(correct_answer, 10)
           })
-          result_text = 'Incorrect. The correct answer was ' + correct_choice[0].name
+          result_text = 'Incorrect. The correct answer was ' + choices[correct_choice].name
         }
       }
 

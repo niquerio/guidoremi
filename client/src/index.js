@@ -11,18 +11,19 @@ import IntervalQuestion from './pages/IntervalQuestion';
 
 import UserStore from './stores/UserStore';
 import * as UserActions from './actions/UserActions'; 
+
+import Axios from './utilities/Axios'
 import './index.css';
 
-UserActions.validateToken().always(function(resp){
-  if(resp.success){
+window.Axios = Axios;
+UserActions.validateToken().then(function(resp){
     window.MIDI.loadPlugin({
       onsuccess: function(){
         renderDom();
       }
     });
-  }else{
+}).catch(function(){
     renderDom();
-  }
 });
 
 

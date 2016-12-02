@@ -1,52 +1,46 @@
 import dispatcher from '../dispatcher';
-import * as TokenActions from './TokenActions';
-import $ from 'jquery'
-import Cookies from 'js-cookie';
+import Axios from '../utilities/Axios';
 
 export function validateToken(){
   dispatcher.dispatch({type: 'VALIDATE_TOKEN'});
-  var promise = $.ajax({
-    url: '/auth/validate_token',
-    type: 'GET',
-    dataType: 'json',
-    success: function(resp, status, request) { 
-      TokenActions.updateCookie(request)
+  return new Promise(function(resolve,reject){
+    Axios.get('/auth/validate_token')
+    .then(function(resp){
       dispatcher.dispatch({type: "RECEIVE_USER",
         user: resp.data
       })
-    },
-    headers: Cookies.getJSON('authHeaders')
+      resolve(resp)
+    }).catch(function(error){
+      reject(error); 
+    });
   });
-  return promise;
+
 }
 
 export function emailSignIn(login){
   dispatcher.dispatch({type: 'SIGNING_IN_USER'});
-  var promise = $.ajax({
-    url: '/auth/sign_in',
-    type: 'POST',
-    dataType: 'json',
-    data: login,
-    success: function(resp, status, request) { 
-      TokenActions.updateCookie(request)
-      dispatcher.dispatch({type: "RECEIVE_USER",
-        user: resp.data
-      })
-    },
+  return new Promise(function(resolve,reject){
+    Axios.post('/auth/sign_in',login)
+      .then(function(resp){
+        dispatcher.dispatch({type: "RECEIVE_USER",
+          user: resp.data
+        })
+        resolve(resp)
+      }).catch(function(error){
+        reject(error)
+      });
   });
-  return promise
 }
 
 export function signOutUser(){
-  var promise = $.ajax({
-    url: '/auth/sign_out',
-    type: 'DELETE',
-    dataType: 'json',
-    success: function(resp, status, request) { 
-      TokenActions.updateCookie(request)
-      dispatcher.dispatch({type: "SIGN_OUT_USER" })
-    },
-    headers: Cookies.getJSON('authHeaders')
+  return new Promise(function(resolve,reject){
+    Axios.delete('/auth/sign_out')
+      .then(function(resp){
+        dispatcher.dispatch({type: "SIGN_OUT_USER" })
+        resolve(resp)
+      }).catch(function(error){
+        reject(error)
+      });
+      
   });
-  return promise
 }

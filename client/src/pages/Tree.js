@@ -1,7 +1,6 @@
 import React from "react";
 import Branch from "../components/tree/Branch";
 import TreeStore from "../stores/TreeStore";
-import Auth from 'j-toker';
 
 export default class Tree extends React.Component {
   constructor(){
@@ -25,7 +24,6 @@ export default class Tree extends React.Component {
     });      
   }
   render() {
-    window.Auth = Auth;
     const {tree} = this.state;
     const BranchComponents = tree.map((branch,idx)=>{
       return <Branch key={idx} leaves={branch}/>
