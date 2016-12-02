@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161130170517) do
+ActiveRecord::Schema.define(version: 20161202195633) do
 
   create_table "answers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -51,6 +51,18 @@ ActiveRecord::Schema.define(version: 20161130170517) do
     t.integer  "skill_id"
     t.string   "slug"
     t.index ["skill_id"], name: "index_question_generators_on_skill_id", using: :btree
+  end
+
+  create_table "scores", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "question_generator_id"
+    t.integer  "user_id"
+    t.boolean  "complete",              default: false
+    t.integer  "current_streak",        default: 0
+    t.integer  "highest_streak",        default: 0
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.index ["question_generator_id"], name: "index_scores_on_question_generator_id", using: :btree
+    t.index ["user_id"], name: "index_scores_on_user_id", using: :btree
   end
 
   create_table "skills", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -102,5 +114,7 @@ ActiveRecord::Schema.define(version: 20161130170517) do
   add_foreign_key "answers", "users"
   add_foreign_key "choices", "multiple_choice_questions"
   add_foreign_key "multiple_choice_questions", "question_generators"
+  add_foreign_key "scores", "question_generators"
+  add_foreign_key "scores", "users"
   add_foreign_key "trees", "skills"
 end

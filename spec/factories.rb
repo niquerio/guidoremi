@@ -1,4 +1,11 @@
 FactoryGirl.define do
+  factory :score do
+    question_generator 
+    user 
+    complete false
+    current_streak 0
+    highest_streak 0
+  end
   factory :tree do
     level 1
     skill
