@@ -4,7 +4,7 @@ import dispatcher from '../dispatcher';
 class AnswerStore extends EventEmitter{
   constructor(){
     super();
-    this.answers = {}
+    this.answer = {}
   }
 
   getAnswer(){
@@ -15,6 +15,11 @@ class AnswerStore extends EventEmitter{
     switch(action.type){
       case "RECEIVE_ANSWER": {
         this.answer = action.answer
+        this.emit("change")
+        break
+      }
+      case "CLEAR_ANSWER": {
+        this.answer = {} 
         this.emit("change")
         break
       }

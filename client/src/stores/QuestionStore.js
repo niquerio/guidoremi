@@ -19,6 +19,11 @@ class QuestionStore extends EventEmitter{
         this.emit("change")
         break
       }
+      case "CLEAR_QUESTION": {
+        this.question = {} 
+        this.emit("change")
+        break
+      }
       default: {
         break
       }

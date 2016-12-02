@@ -1,5 +1,5 @@
 import React from "react";
-import Auth from 'j-toker';
+import * as UserActions from '../actions/UserActions';
 import _ from 'lodash';
 import { withRouter } from "react-router";
 import { Row, Col, Button } from 'react-bootstrap';
@@ -22,7 +22,7 @@ class SignIn extends React.Component {
 
   handleSignIn() {
     var self = this
-    Auth.emailSignIn({
+    UserActions.emailSignIn({
       email: this.state.email,
       password: this.state.password 
     }).then(function(resp){

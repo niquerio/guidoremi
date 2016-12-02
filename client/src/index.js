@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, hashHistory } from "react-router";
-import Auth from 'j-toker'
-import PubSub from 'pubsub-js'
 
 import Layout from './components/Layout.js'
 import Home from './pages/Home';
@@ -12,32 +10,22 @@ import Skills from './pages/Skills';
 import IntervalQuestion from './pages/IntervalQuestion';
 
 import UserStore from './stores/UserStore';
+import * as UserActions from './actions/UserActions'; 
 import './index.css';
 
-Auth.configure({
-  apiUrl: 'http://192.168.56.101:3001'
-});
-
-
-
-var firstValidate = false;
-PubSub.subscribe('auth.validation.success',function(ev, user){
-  if(!firstValidate){
-    firstValidate = true;
+UserActions.validateToken().always(function(resp){
+  if(resp.success){
     window.MIDI.loadPlugin({
       onsuccess: function(){
         renderDom();
       }
     });
-  }
-});
-
-PubSub.subscribe('auth.validation.error',function(ev, error){
-  if(!firstValidate){
-    firstValidate = true;
+  }else{
     renderDom();
   }
 });
+
+
 
 function requireAuth(nextState, replace){
   if(!UserStore.signedIn()){    

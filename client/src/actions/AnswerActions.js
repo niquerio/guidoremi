@@ -1,6 +1,7 @@
 import dispatcher from '../dispatcher';
 import $ from 'jquery'
-import Auth from 'j-toker'
+import * as TokenActions from './TokenActions'
+import Cookies from 'js-cookie'
 
 export function checkAnswer(q_id, choice){
   dispatcher.dispatch({type: 'FETCHING_ANSWER'});
@@ -9,11 +10,16 @@ export function checkAnswer(q_id, choice){
     type: 'PUT',
     dataType: 'json',
     data: { answer: {'user_answer': choice} },
-    success: function(resp) { 
+    success: function(resp, status, request) { 
+      TokenActions.updateCookie(request)
       dispatcher.dispatch({type: "RECEIVE_ANSWER",
         answer: resp
       })
     },
-    headers: Auth.retrieveData('authHeaders')
+    headers: Cookies.getJSON('authHeaders'),
   });
 }
+export function clear(){
+    dispatcher.dispatch({type: "CLEAR_ANSWER"});
+}
+

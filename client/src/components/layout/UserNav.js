@@ -4,9 +4,10 @@ import * as UserActions from '../../actions/UserActions'
 
 class UserNav extends React.Component{
   handleSignOut(){
-    UserActions.signOutUser();
-
-    this.props.router.push('/')
+    var self = this
+    UserActions.signOutUser().always(function(){
+      self.props.router.push('/')
+    });
     
   }
   render(){
