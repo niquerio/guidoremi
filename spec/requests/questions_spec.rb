@@ -1,30 +1,48 @@
 require 'rails_helper'
 describe 'PUT /api/v1/questions/:id/answer' do
   describe  'as authorized user' do
+    before(:each) do
+      @iqg, @user, @params = setup_so_mi.values_at(:iqg, :user, :params)
+      @header = @user.create_new_auth_token
+      @question = @iqg.make_question(@user)
+      @correct = @question.answer.correct_answer
+    end
     it 'shows the correct answer in the response' do
-      iqg, user, params = setup_so_mi.values_at(:iqg, :user, :params)
-      header = user.create_new_auth_token
-      question = iqg.make_question(user)
-      #sends question_id and user answer
-      put "/api/v1/questions/#{question.id}/answer", params: {user_answer: question.answer.correct_answer}, headers: header, as: :json
+      put "/api/v1/questions/#{@question.id}/answer", params: {user_answer: @correct}, headers: @header, as: :json
       expect(response).to have_http_status(:success)
       expect(response.body).to include('correct_answer')
       expect(response.body).to include('result')
     end
 
     it 'updates the Answer with user answer' do
-      iqg, user, params = setup_so_mi.values_at(:iqg, :user, :params)
-      header = user.create_new_auth_token
-      question = iqg.make_question(user)
-      correct = question.answer.correct_answer
-      #sends question_id and user answer
       expect(Answer.first.user_answer).to be_nil
 
-      put "/api/v1/questions/#{question.id}/answer", params: {user_answer: correct}, headers: header, as: :json
+      put "/api/v1/questions/#{@question.id}/answer", params: {user_answer: @correct}, headers: @header, as: :json
 
-      expect(Answer.first.user_answer).to eq(correct)
+      expect(Answer.first.user_answer).to eq(@correct)
     end
-
+    it 'creates new score if none already' do
+      expect(Score.first).to be_nil
+      put "/api/v1/questions/#{@question.id}/answer", params: {user_answer: @correct}, headers: @header, as: :json
+      expect(Score.first).not_to be_nil
+    end
+    it 'creates new skill_score if none already' do
+      expect(SkillScore.first).to be_nil
+      put "/api/v1/questions/#{@question.id}/answer", params: {user_answer: @correct}, headers: @header, as: :json
+      expect(SkillScore.first).not_to be_nil
+    end
+    it 'updates score' do
+      score = create(:score, user: @user, question_generator: @iqg, current_streak: 5, highest_streak:5, complete: false)
+      expect(Score.first.current_streak).to eq(5)
+      put "/api/v1/questions/#{@question.id}/answer", params: {user_answer: @correct}, headers: @header, as: :json
+      expect(Score.first.current_streak).to eq(6)
+      expect(Score.first.highest_streak).to eq(6)
+    end
+    it 'updates skill_score' do
+      score = create(:score, user: @user, question_generator: @iqg, current_streak: 9, highest_streak:9, complete: false)
+      put "/api/v1/questions/#{@question.id}/answer", params: {user_answer: @correct}, headers: @header, as: :json
+      expect(SkillScore.first.complete).to eq(1)
+    end
 
   end
 

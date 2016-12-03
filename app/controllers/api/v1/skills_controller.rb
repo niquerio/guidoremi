@@ -3,6 +3,7 @@ module Api
     class SkillsController < ApiController
       def index
         @skills = Skill.all
+        @scores = Score.where(user: current_user)
       end
     end
   end

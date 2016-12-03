@@ -1,6 +1,7 @@
 class Score < ApplicationRecord
   belongs_to :question_generator
   belongs_to :user
+  
 
   def update_score(status)
     if status == 'correct'
@@ -13,5 +14,7 @@ class Score < ApplicationRecord
     else
       puts 'error'
     end
+    self.save!
   end
+
 end

@@ -18,5 +18,6 @@ class SkillScore < ApplicationRecord
       end
     end 
     self.complete = complete_qgs
+    self.save!
   end 
 end
