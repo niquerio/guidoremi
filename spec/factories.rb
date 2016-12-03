@@ -1,4 +1,10 @@
 FactoryGirl.define do
+  factory :skill_score do
+    user 
+    skill 
+    total 0
+    complete 0
+  end
   factory :score do
     question_generator 
     user 

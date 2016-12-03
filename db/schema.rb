@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161202195633) do
+ActiveRecord::Schema.define(version: 20161202221552) do
 
   create_table "answers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -56,13 +56,24 @@ ActiveRecord::Schema.define(version: 20161202195633) do
   create_table "scores", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "question_generator_id"
     t.integer  "user_id"
-    t.boolean  "complete",              default: false
-    t.integer  "current_streak",        default: 0
-    t.integer  "highest_streak",        default: 0
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.boolean  "complete"
+    t.integer  "current_streak"
+    t.integer  "highest_streak"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
     t.index ["question_generator_id"], name: "index_scores_on_question_generator_id", using: :btree
     t.index ["user_id"], name: "index_scores_on_user_id", using: :btree
+  end
+
+  create_table "skill_scores", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.integer  "skill_id"
+    t.integer  "total",      default: 0
+    t.integer  "complete",   default: 0
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.index ["skill_id"], name: "index_skill_scores_on_skill_id", using: :btree
+    t.index ["user_id"], name: "index_skill_scores_on_user_id", using: :btree
   end
 
   create_table "skills", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -116,5 +127,7 @@ ActiveRecord::Schema.define(version: 20161202195633) do
   add_foreign_key "multiple_choice_questions", "question_generators"
   add_foreign_key "scores", "question_generators"
   add_foreign_key "scores", "users"
+  add_foreign_key "skill_scores", "skills"
+  add_foreign_key "skill_scores", "users"
   add_foreign_key "trees", "skills"
 end
