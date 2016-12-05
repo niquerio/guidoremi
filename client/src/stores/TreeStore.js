@@ -24,6 +24,10 @@ class TreeStore extends EventEmitter{
     }
   } 
 
+  _updateTree(leaf){
+    
+  }
+
 //Public Functions
   getTree() {
     return this.tree
@@ -34,6 +38,11 @@ class TreeStore extends EventEmitter{
     switch(action.type){
       case "RECEIVE_TREE": {
         this.tree = action.tree
+        this.emit("change")
+        break
+      }
+      case "UPDATE_LEAF": {
+        this._updateTree(action.leaf) 
         this.emit("change")
         break
       }

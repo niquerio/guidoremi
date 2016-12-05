@@ -6,15 +6,17 @@ import * as QuestionActions from "../actions/QuestionActions";
 import Choice from "../components/interval_question/Choice";
 import * as AnswerActions from "../actions/AnswerActions";
 import AnswerStore from "../stores/AnswerStore";
+import SkillStore from "../stores/SkillStore";
 import _ from 'lodash'
-//import $ from 'jquery'
 
 export default class IntervalQuestion extends React.Component {
   constructor(){
     super();
     this.getQuestion = this.getQuestion.bind(this);
     this.showResult = this.showResult.bind(this);
+    this.getScore = this.getScore.bind(this);
     this.state = {
+      score: {},
       question: null, 
       selected: null,
       correct_answer: null,
@@ -22,15 +24,25 @@ export default class IntervalQuestion extends React.Component {
     };
   }
   componentWillMount(){
+    this.getScore();
     QuestionActions.getNewQuestion(this.props.params.qg)
     QuestionStore.on('change', this.getQuestion)
     AnswerStore.on('change', this.showResult)
+    SkillStore.on('change', this.getScore)
   }
   componentWillUnmount(){
     QuestionStore.removeListener('change', this.getQuestion)
     AnswerStore.removeListener('change', this.showResult)
+    SkillStore.removeListener('change', this.getScore)
     QuestionActions.clear();
     AnswerActions.clear();
+  }
+
+  getScore(){
+    var score = SkillStore.getScore(this.props.params.qg)
+    this.setState({'score': score});
+    console.log(this.state)
+    
   }
 
   getQuestion(){

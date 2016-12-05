@@ -56,11 +56,11 @@ ActiveRecord::Schema.define(version: 20161202221552) do
   create_table "scores", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "question_generator_id"
     t.integer  "user_id"
-    t.boolean  "complete"
-    t.integer  "current_streak"
-    t.integer  "highest_streak"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.boolean  "complete",              default: false
+    t.integer  "current_streak",        default: 0
+    t.integer  "highest_streak",        default: 0
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.index ["question_generator_id"], name: "index_scores_on_question_generator_id", using: :btree
     t.index ["user_id"], name: "index_scores_on_user_id", using: :btree
   end

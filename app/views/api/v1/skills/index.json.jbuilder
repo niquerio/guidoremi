@@ -7,13 +7,13 @@ json.array!(@skills) do |skill|
       json.name qg.name
       score = @scores.find_by(question_generator: qg)
       if score
-        json.complete = score.complete
-        json.current_streak = score.current_streak
-        json.highest_streak = score.highest_streak
+        json.complete  score.complete
+        json.current_streak  score.current_streak
+        json.highest_streak  score.highest_streak
       else
-        json.complete = false
-        json.current_streak = 0 
-        json.highest_streak = 0
+        json.complete  false
+        json.current_streak  0 
+        json.highest_streak  0
       end
     end
   end
