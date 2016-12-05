@@ -2,6 +2,7 @@ import {EventEmitter} from "events";
 import dispatcher from '../dispatcher';
 import UserStore from './UserStore';
 import * as TreeActions from  '../actions/TreeActions'
+import _ from 'lodash'
 
 class TreeStore extends EventEmitter{
   constructor(){
@@ -24,9 +25,6 @@ class TreeStore extends EventEmitter{
     }
   } 
 
-  _updateTree(leaf){
-    
-  }
 
 //Public Functions
   getTree() {
@@ -42,7 +40,13 @@ class TreeStore extends EventEmitter{
         break
       }
       case "UPDATE_LEAF": {
-        this._updateTree(action.leaf) 
+        var leafIndex = -1;
+        console.log('update_leaf');
+        var branchIndex =  _.findIndex(this.tree, function(a){
+          leafIndex =  _.findIndex(a, { 'slug': action.slug });
+          if (leafIndex > -1){ return true }
+        });
+        _.assign(this.tree[branchIndex][leafIndex], action.skill_score)
         this.emit("change")
         break
       }

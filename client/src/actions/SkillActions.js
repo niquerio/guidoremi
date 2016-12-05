@@ -9,3 +9,12 @@ export function getSkills(){
     })
   });
 }
+
+export function updateScore(skill_index,qg_index,score){
+  dispatcher.dispatch({
+    type: "UPDATE_SCORE",
+    skill_index: skill_index,
+    qg_index: qg_index,
+    score: score,
+  });
+}

@@ -4,6 +4,7 @@ import {Button} from 'react-bootstrap';
 import QuestionStore from "../stores/QuestionStore";
 import * as QuestionActions from "../actions/QuestionActions";
 import Choice from "../components/interval_question/Choice";
+import Score from "../components/interval_question/Score";
 import * as AnswerActions from "../actions/AnswerActions";
 import AnswerStore from "../stores/AnswerStore";
 import SkillStore from "../stores/SkillStore";
@@ -40,8 +41,9 @@ export default class IntervalQuestion extends React.Component {
 
   getScore(){
     var score = SkillStore.getScore(this.props.params.qg)
-    this.setState({'score': score});
-    console.log(this.state)
+    this.setState({
+      score: score,
+    });
     
   }
 
@@ -83,6 +85,7 @@ export default class IntervalQuestion extends React.Component {
       const {choices} = this.state.question
       const {question} = this.state
       const {correct_answer} = this.state
+      const {score} = this.state
       const answer_mode = correct_answer != null;
 
       var result_text = '', button_text = '';
@@ -108,6 +111,7 @@ export default class IntervalQuestion extends React.Component {
         return <Choice answer_mode={answer_mode} key={choice.id} choice={choice} changeSelected={this.changeSelected.bind(this)}/>; 
       }); 
       return(<div>
+        <Score score={score}/>
         <h1>{question.prompt}</h1>
         <div className="radio">
         {ChoiceComponents} 

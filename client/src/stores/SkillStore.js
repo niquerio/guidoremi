@@ -36,12 +36,12 @@ class SkillStore extends EventEmitter{
   }
 
   getScore(slug){
-    console.log('getScore')
     var qgs = _.map(this.skills, 'question_generators')
     var merged = [].concat.apply([], qgs);
     var qg = _.find(merged, {'slug': slug}) 
     return _.pick(qg, ['complete', 'current_streak', 'highest_streak']);
   }
+
   handleActions(action){
     switch(action.type){
       case "RECEIVE_SKILLS": {
@@ -50,8 +50,10 @@ class SkillStore extends EventEmitter{
         break
       }
       case "UPDATE_SCORE": {
-        var index = _.indexOf(this.skills, _.find(this.skills, {slug: action.slug}));
-        _.assign(this.skills[index], action.score);
+        var skill_index = _.indexOf(this.skills, _.find(this.skills, {slug: action.skill_slug}));
+        var qgs = this.skills[skill_index]['question_generators']
+        var qg_index = _.indexOf(qgs, _.find(qgs, {slug: action.qg_slug}));
+        _.assign(this.skills[skill_index]['question_generators'][qg_index], action.score);
         this.emit("change")
         break
       } 
