@@ -10,7 +10,7 @@ class TreeStore extends EventEmitter{
     this.tree = []
     this._reloadTree(); 
     var self = this
-    UserStore.on("change", () => {
+    UserStore.addListener(() => {
       self._reloadTree(); 
     });
   }

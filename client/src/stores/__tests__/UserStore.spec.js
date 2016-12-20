@@ -1,36 +1,66 @@
-jest.enableAutomock()
-jest.dontMock('../UserStore');
-
-import dispatcher from '../../dispatcher';
+import Dispatcher from '../../dispatcher'
 import UserStore from '../UserStore'
 
 describe('UserStore', function(){
-  var actionReceiveUser = {
-    action: {
+
+  beforeEach(function(){
+    this.state = UserStore.getInitialState();
+
+    this.dispatch = action => {
+      this.state = UserStore.reduce(this.state, action);
+    };
+  });
+
+
+  it('initializes with no user', function(){
+    expect(this.state).toEqual({});
+  });
+  it('receives a user', function(){
+    expect(this.state).toEqual({});
+    this.dispatch({
       type: 'RECEIVE_USER',
       user: {
         email: 'blah@example.com'
       } 
-    }
-  };
-  var callback;
+    });
+    expect(this.state.email).toEqual('blah@example.com')
+  });
+  it('signs out a user', function(){
+    this.dispatch({
+      type: 'RECEIVE_USER',
+      user: {
+        email: 'blah@example.com'
+      } 
+    });
+    expect(this.state.email).toEqual('blah@example.com')
 
-  beforeEach(function(){
-    callback = dispatcher.register.mock.calls[0][0];
-  });
+    this.dispatch({
+      type: 'SIGN_OUT_USER'
+    });
 
-  it('registers a callback with the dispatcher', function(){
-    expect(dispatcher.register.mock.calls.length).toBe(1);
+    expect(this.state).toEqual({})
+    
   });
-  it('initializes with no user', function(){
-    var user = UserStore.getUser();
-    expect(user).toEqual({});
+  describe('signedIn()', function(){
+    beforeEach(function(){
+      Dispatcher.dispatch({
+        type: 'SIGN_OUT_USER'
+      });
+    });
+    it('returns true if user is signed in', function(){
+        Dispatcher.dispatch({
+          type: 'RECEIVE_USER',
+          user: {
+            email: 'blah@example.com'
+          } 
+        });
+        expect(UserStore.signedIn()).toEqual(true)
+    });
+    it('signedIn() returns false if user is not signed in', function(){
+        expect(UserStore.signedIn()).toEqual(false)
+    });
   });
-  it('receives a user', function(){
-    callback(actionReceiveUser);
-    var user = UserStore.getUser()
-    expect(user.email).toEqual('blah@example.com')
-  });
+  
 
 });
 

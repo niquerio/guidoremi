@@ -9,7 +9,7 @@ export default class Layout extends React.Component{
     this.state = {authenticated: UserStore.signedIn()};
   }
   componentWillMount(){
-    UserStore.on("change", () => {
+    UserStore.addListener( () => {
       this.setState({authenticated: UserStore.signedIn()});      
     });
   }

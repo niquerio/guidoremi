@@ -10,7 +10,7 @@ class SkillStore extends EventEmitter{
     this.skills = []
     this._reloadSkills(); 
     var self = this
-    UserStore.on("change", () => {
+    UserStore.addListener(() => {
       self._reloadSkills(); 
     });
   }

@@ -1,35 +1,34 @@
-import {EventEmitter} from "events";
+import {ReduceStore} from 'flux/utils';
 import dispatcher from '../dispatcher';
+import _ from 'lodash'
 
-class AnswerStore extends EventEmitter{
+class AnswerStore extends ReduceStore{
   constructor(){
-    super();
-    this.answer = {}
+    super(dispatcher);
   }
 
-  getAnswer(){
-    return this.answer
+  getInitialState(){
+    return {};
   }
 
-  handleActions(action){
+  getState(){
+    return _.clone(this._state, true) 
+  }
+
+  reduce(state, action){
     switch(action.type){
       case "RECEIVE_ANSWER": {
-        this.answer = action.answer
-        this.emit("change")
-        break
+        return _.clone(action.answer, true);
       }
       case "CLEAR_ANSWER": {
-        this.answer = {} 
-        this.emit("change")
-        break
+        return{}
       }
       default: {
-        break
+        return state;
       }
     }
   }
 }
 
 const answerStore = new AnswerStore()
-dispatcher.register(answerStore.handleActions.bind(answerStore));
 export default answerStore;
