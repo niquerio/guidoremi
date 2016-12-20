@@ -20,6 +20,7 @@ class UserStore extends EventEmitter{
   handleActions(action){
     switch(action.type){
       case "RECEIVE_USER":{
+        console.log('user_received')
         this.user = _.clone(action.user, true);
         this.emit("change");
         break
