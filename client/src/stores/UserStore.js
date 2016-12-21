@@ -1,6 +1,6 @@
+import Immutable from 'immutable'; 
 import {ReduceStore} from 'flux/utils';
 import dispatcher from '../dispatcher';
-import _ from 'lodash'
 
 class UserStore extends ReduceStore{
   constructor(){
@@ -8,26 +8,21 @@ class UserStore extends ReduceStore{
   }
 
   getInitialState(){
-    return {};
+    return Immutable.Map(); 
   }
-
-  getState(){
-    return _.clone(this._state, true) 
-  }
-
 
   signedIn(){
-    return !(_.isEmpty(this._state))
+    return !(this._state.isEmpty())
   }
 
   reduce(state, action){
     switch(action.type){
       case "RECEIVE_USER":{
-        return _.clone(action.user, true);
+        return Immutable.fromJS(action.user)
       }
       case "SIGN_OUT_USER":{
         
-        return {}
+        return state.clear();
       }
       default: {
         return state;

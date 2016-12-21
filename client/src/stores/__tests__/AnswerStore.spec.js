@@ -13,17 +13,17 @@ describe('AnswerStore', function(){
 
 
   it('initializes with no answer', function(){
-    expect(this.state).toEqual({});
+    expect(this.state.isEmpty()).toEqual(true);
   });
   it('receives an answer', function(){
-    expect(this.state).toEqual({});
+    expect(this.state.isEmpty()).toEqual(true);
     this.dispatch({
       type: 'RECEIVE_ANSWER',
       answer: {
         correct: true
       } 
     });
-    expect(this.state.correct).toEqual(true)
+    expect(this.state.get('correct')).toEqual(true)
   });
   it('clears answer', function(){
     this.dispatch({
@@ -32,13 +32,13 @@ describe('AnswerStore', function(){
         correct: true
       } 
     });
-    expect(this.state.correct).toEqual(true)
+    expect(this.state.get('correct')).toEqual(true)
 
     this.dispatch({
       type: 'CLEAR_ANSWER',
     });
 
-    expect(this.state).toEqual({})
+    expect(this.state.isEmpty()).toEqual(true)
     
   });
   

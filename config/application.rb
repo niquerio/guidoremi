@@ -28,7 +28,8 @@ module Guidoremi
     config.api_only = true
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'http://dufay.elkiss.com:3000'
+        #origins 'http://dufay.elkiss.com:3000'
+        origins 'http://grudenczvm.com:3000'
         resource '*', 
           :headers => :any, 
           :expose => ['access-token', 'expiry', 'token-type', 'uid', 'client'],

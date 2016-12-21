@@ -13,17 +13,17 @@ describe('UserStore', function(){
 
 
   it('initializes with no user', function(){
-    expect(this.state).toEqual({});
+    expect(this.state.isEmpty()).toEqual(true);
   });
   it('receives a user', function(){
-    expect(this.state).toEqual({});
+    expect(this.state.isEmpty()).toEqual(true);
     this.dispatch({
       type: 'RECEIVE_USER',
       user: {
         email: 'blah@example.com'
       } 
     });
-    expect(this.state.email).toEqual('blah@example.com')
+    expect(this.state.get('email')).toEqual('blah@example.com')
   });
   it('signs out a user', function(){
     this.dispatch({
@@ -32,13 +32,13 @@ describe('UserStore', function(){
         email: 'blah@example.com'
       } 
     });
-    expect(this.state.email).toEqual('blah@example.com')
+    expect(this.state.get('email')).toEqual('blah@example.com')
 
     this.dispatch({
       type: 'SIGN_OUT_USER'
     });
 
-    expect(this.state).toEqual({})
+    expect(this.state.isEmpty()).toEqual(true)
     
   });
   describe('signedIn()', function(){

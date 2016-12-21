@@ -41,7 +41,6 @@ class TreeStore extends EventEmitter{
       }
       case "UPDATE_LEAF": {
         var leafIndex = -1;
-        console.log('update_leaf');
         var branchIndex =  _.findIndex(this.tree, function(a){
           leafIndex =  _.findIndex(a, { 'slug': action.slug });
           if (leafIndex > -1){ return true }

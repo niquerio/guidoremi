@@ -27,13 +27,13 @@ export default class IntervalQuestion extends React.Component {
   componentWillMount(){
     this.getScore();
     QuestionActions.getNewQuestion(this.props.params.qg)
-    QuestionStore.on('change', this.getQuestion)
+    this.questionListener = QuestionStore.addListener(this.getQuestion)
     SkillStore.on('change', this.getScore)
     this.answerListener = AnswerStore.addListener(this.showResult)
   }
   componentWillUnmount(){
-    QuestionStore.removeListener('change', this.getQuestion)
     SkillStore.removeListener('change', this.getScore)
+    this.questionListener.remove();
     this.answerListener.remove();
     QuestionActions.clear();
     AnswerActions.clear();
@@ -48,14 +48,14 @@ export default class IntervalQuestion extends React.Component {
   }
 
   getQuestion(){
-    this.setState({question: QuestionStore.getQuestion() });
+    this.setState({question: QuestionStore.getState() });
   }
 
   showResult(){
     var answer = AnswerStore.getState()
     this.setState({
-      result: answer.result,
-      correct_answer: answer.correct_answer,
+      result: answer.get('result'),
+      correct_answer: answer.get('correct_answer'),
     });
   }
 
@@ -66,7 +66,7 @@ export default class IntervalQuestion extends React.Component {
   submit(e){
     if(e.target.textContent === "Submit"){
       if(this.state.selected){
-        AnswerActions.checkAnswer(this.state.question.id, this.state.selected)
+        AnswerActions.checkAnswer(this.state.question.get('id'), this.state.selected)
       }
     }
     else{
@@ -82,8 +82,8 @@ export default class IntervalQuestion extends React.Component {
 
   render() {
     if(this.state.question){
-      const {choices} = this.state.question
       const {question} = this.state
+      const choices = question.get('choices')
       const {correct_answer} = this.state
       const {score} = this.state
       const answer_mode = correct_answer != null;
@@ -106,13 +106,12 @@ export default class IntervalQuestion extends React.Component {
         }
       }
 
-      
       const ChoiceComponents = choices.map((choice)=>{
-        return <Choice answer_mode={answer_mode} key={choice.id} choice={choice} changeSelected={this.changeSelected.bind(this)}/>; 
+        return <Choice answer_mode={answer_mode} key={choice.get('id')} choice={choice} changeSelected={this.changeSelected.bind(this)}/>; 
       }); 
       return(<div>
         <Score score={score}/>
-        <h1>{question.prompt}</h1>
+        <h1>{question.get('prompt')}</h1>
         <div className="radio">
         {ChoiceComponents} 
         </div>

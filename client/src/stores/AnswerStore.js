@@ -1,6 +1,6 @@
 import {ReduceStore} from 'flux/utils';
 import dispatcher from '../dispatcher';
-import _ from 'lodash'
+import Immutable from 'immutable';
 
 class AnswerStore extends ReduceStore{
   constructor(){
@@ -8,20 +8,16 @@ class AnswerStore extends ReduceStore{
   }
 
   getInitialState(){
-    return {};
-  }
-
-  getState(){
-    return _.clone(this._state, true) 
+    return Immutable.Map();
   }
 
   reduce(state, action){
     switch(action.type){
       case "RECEIVE_ANSWER": {
-        return _.clone(action.answer, true);
+        return Immutable.fromJS(action.answer)
       }
       case "CLEAR_ANSWER": {
-        return{}
+        return state.clear();
       }
       default: {
         return state;
