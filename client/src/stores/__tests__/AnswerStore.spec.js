@@ -1,4 +1,3 @@
-import Dispatcher from '../../dispatcher'
 import AnswerStore from '../AnswerStore'
 
 describe('AnswerStore', function(){

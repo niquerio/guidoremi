@@ -1,13 +1,12 @@
-import {EventEmitter} from "events";
+import {ReduceStore} from 'flux/utils';
+import Immutable from 'immutable';
 import dispatcher from '../dispatcher';
 import UserStore from './UserStore';
 import * as TreeActions from  '../actions/TreeActions'
-import _ from 'lodash'
 
-class TreeStore extends EventEmitter{
+class TreeStore extends ReduceStore{
   constructor(){
-    super();
-    this.tree = []
+    super(dispatcher);
     this._reloadTree(); 
     var self = this
     UserStore.addListener(() => {
@@ -15,13 +14,14 @@ class TreeStore extends EventEmitter{
     });
   }
 
+  getInitialState(){
+    return Immutable.List();
+  }
+
 //Private Functions
   _reloadTree() {
     if(UserStore.signedIn()){
       TreeActions.getTree()
-    }
-    else{
-      this.tree = []
     }
   } 
 
@@ -32,25 +32,24 @@ class TreeStore extends EventEmitter{
   }
 
 //Handle Dispatched Actions
-  handleActions(action){
+  reduce(state, action){
     switch(action.type){
       case "RECEIVE_TREE": {
-        this.tree = action.tree
-        this.emit("change")
-        break
+        return Immutable.fromJS(action.tree)
       }
       case "UPDATE_LEAF": {
-        var leafIndex = -1;
-        var branchIndex =  _.findIndex(this.tree, function(a){
-          leafIndex =  _.findIndex(a, { 'slug': action.slug });
-          if (leafIndex > -1){ return true }
+        var index = [-1,-1]
+        index[0] = state.findIndex(function(item){
+          index[1] = item.findIndex(function(leaf){   
+            return leaf.get('slug') === action.slug 
+          });
+          return index[1] >= 0
         });
-        _.assign(this.tree[branchIndex][leafIndex], action.skill_score)
-        this.emit("change")
-        break
+
+        return state.mergeIn(index, Immutable.fromJS(action.skill_score)); 
       }
       default: {
-        break
+        return state;
       }
     }
   }
@@ -58,6 +57,5 @@ class TreeStore extends EventEmitter{
 }
 
 const treeStore = new TreeStore()
-dispatcher.register(treeStore.handleActions.bind(treeStore));
 
 export default treeStore;
