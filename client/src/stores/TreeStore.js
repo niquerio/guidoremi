@@ -23,13 +23,11 @@ class TreeStore extends ReduceStore{
     if(UserStore.signedIn()){
       TreeActions.getTree()
     }
+    //Need Clear Tree Action
   } 
 
 
 //Public Functions
-  getTree() {
-    return this.tree
-  }
 
 //Handle Dispatched Actions
   reduce(state, action){
