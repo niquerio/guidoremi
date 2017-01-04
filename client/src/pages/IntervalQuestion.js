@@ -28,13 +28,13 @@ export default class IntervalQuestion extends React.Component {
     this.getScore();
     QuestionActions.getNewQuestion(this.props.params.qg)
     this.questionListener = QuestionStore.addListener(this.getQuestion)
-    SkillStore.on('change', this.getScore)
+    this.skillListener = SkillStore.addListener(this.getScore)
     this.answerListener = AnswerStore.addListener(this.showResult)
   }
   componentWillUnmount(){
-    SkillStore.removeListener('change', this.getScore)
     this.questionListener.remove();
     this.answerListener.remove();
+    this.skillListener.remove();
     QuestionActions.clear();
     AnswerActions.clear();
   }

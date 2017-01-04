@@ -30,15 +30,7 @@ class SkillStore extends ReduceStore{
     }
   }
   getSkill(slug) {
-    return _.find(this.skills, {slug: slug});
-    //var s = {};
-    //for (var i = 0; i < this.skills.length; i++){
-    //  if(this.skills[i].slug === slug){
-    //    s = this.skills[i]
-    //    break;
-    //  }
-    //}
-    //return s;
+    return this._state.find(function(obj){return obj.get('slug') === slug});
   }
 
   getScore(slug){
@@ -46,7 +38,7 @@ class SkillStore extends ReduceStore{
      return list.concat(current.get('question_generators'))
     }, Immutable.List());
     var qg = qgs.find(function(obj){
-      return obj.get('slug') == slug
+      return obj.get('slug') === slug
     });
     function keyIn(...keys) {
       var keySet = Immutable.Set(keys); 
@@ -65,12 +57,12 @@ class SkillStore extends ReduceStore{
       }
       case "UPDATE_SCORE": {
         var skill_index = state.findIndex(function(skill){
-          return skill.get('slug') == action.skill_slug
+          return skill.get('slug') === action.skill_slug
         });
        
         var skill = state.get(skill_index)
         var qg_index = skill.get('question_generators').findIndex(function(qg){
-          return qg.get('slug') == action.qg_slug
+          return qg.get('slug') === action.qg_slug
 }); 
         return state.mergeIn([skill_index, 'question_generators', qg_index], Immutable.fromJS(action.score));
 

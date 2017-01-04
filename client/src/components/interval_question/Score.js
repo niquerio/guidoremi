@@ -3,9 +3,9 @@ import React from "react";
 
 export default class Score extends React.Component {
   render(){
-    const {current_streak} = this.props.score
-    const {highest_streak} = this.props.score
-    const {complete} = this.props.score
+    const current_streak = this.props.score.get('current_streak')
+    const highest_streak = this.props.score.get('highest_streak')
+    const complete = this.props.score.get('complete')
     return(
       <div>
         Current Streak: {current_streak}
