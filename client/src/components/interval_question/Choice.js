@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 
 export default class Choice extends React.Component {
   playMidi(){
-    window.MIDI.Player.loadFile(this.props.choice.midi, function(){
+    window.MIDI.Player.loadFile(this.props.choice.get('midi'), function(){
       window.MIDI.Player.stop();
       window.MIDI.Player.resume();
     });
@@ -13,6 +13,7 @@ export default class Choice extends React.Component {
     this.props.changeSelected(selected);
   }
   render(){
+    
     const {choice} = this.props;
     const {answer_mode} = this.props;
     var inputStyle = {
@@ -22,7 +23,7 @@ export default class Choice extends React.Component {
     }
     return(
     <label className="radio-inline">
-     <input onChange={this.handleChange.bind(this)} type="radio" style={inputStyle} name="choicesRadio" id={choice.id} value={choice.id} disabled={answer_mode}/> {choice.name}  <Button onClick={this.playMidi.bind(this)} >
+     <input onChange={this.handleChange.bind(this)} type="radio" style={inputStyle} name="choicesRadio" id={choice.get('id')} value={choice.get('id')} disabled={answer_mode}/> {choice.get('name')}  <Button onClick={this.playMidi.bind(this)} >
   <span className="glyphicon glyphicon-play" aria-hidden="true"></span>
 </Button>
     </label> 

@@ -14,10 +14,12 @@ export default class Skills extends React.Component {
   }
   componentWillMount(){
       this.getSkill();
-      SkillStore.on('change', this.getSkill)
+      this.listener = SkillStore.addListener(this.getSkill);
+      //SkillStore.on('change', this.getSkill)
   }
   componentWillUnmount(){
-      SkillStore.removeListener('change', this.getSkill)
+      //SkillStore.removeListener('change', this.getSkill)
+      this.listener.remove();
   }
 
   getSkill(){
@@ -27,8 +29,8 @@ export default class Skills extends React.Component {
   }
   render() {
     if(!(_.isEmpty(this.state.skill))){
-      const {name} = this.state.skill
-      const {question_generators} = this.state.skill
+      const name = this.state.skill.get('name')
+      const question_generators = this.state.skill.get('question_generators')
       const SkillComponents = question_generators.map((qg, idx)=>{
         return <Skill key={idx} skill={qg} branch={this.props.params.skill}/>; 
       }); 

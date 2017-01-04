@@ -1,37 +1,32 @@
-import {EventEmitter} from "events";
+import {ReduceStore} from "flux/utils";
 import dispatcher from '../dispatcher';
+import Immutable from 'immutable';
 
-class QuestionStore extends EventEmitter{
+class QuestionStore extends ReduceStore{
   constructor(){
-    super();
-    this.question = {}
+    super(dispatcher);
       
   }
 
-  getQuestion() {
-    return this.question
+  getInitialState() {
+    return Immutable.Map();
   }
 
-  handleActions(action){
+  reduce(state, action){
     switch(action.type){
       case "RECEIVE_QUESTION": {
-        this.question = action.question
-        this.emit("change")
-        break
+        return Immutable.fromJS(action.question)
       }
       case "CLEAR_QUESTION": {
-        this.question = {} 
-        this.emit("change")
-        break
+        return state.clear();
       }
       default: {
-        break
+        return state;
       }
     }
   }
 }
 
 const questionStore = new QuestionStore();
-dispatcher.register(questionStore.handleActions.bind(questionStore));
 
 export default questionStore;

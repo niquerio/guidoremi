@@ -1,18 +1,23 @@
-import {EventEmitter} from "events";
+import {ReduceStore} from 'flux/utils';
+import Immutable from 'immutable';
 import dispatcher from '../dispatcher';
 import UserStore from './UserStore';
 import * as SkillActions from  '../actions/SkillActions'
+
 import _ from 'lodash'
 
-class SkillStore extends EventEmitter{
+class SkillStore extends ReduceStore{
   constructor(){
-    super();
-    this.skills = []
+    super(dispatcher);
     this._reloadSkills(); 
     var self = this
-    UserStore.on("change", () => {
+    UserStore.addListener(() => {
       self._reloadSkills(); 
     });
+  }
+
+  getInitialState(){
+    return Immutable.List();
   }
 
   _reloadSkills(){
@@ -20,51 +25,55 @@ class SkillStore extends EventEmitter{
       SkillActions.getSkills()
     }
     else{
-      this.skills = []
+    //Need Clear Skills Action
+//      this.skills = []
     }
   }
   getSkill(slug) {
-    return _.find(this.skills, {slug: slug});
-    //var s = {};
-    //for (var i = 0; i < this.skills.length; i++){
-    //  if(this.skills[i].slug === slug){
-    //    s = this.skills[i]
-    //    break;
-    //  }
-    //}
-    //return s;
+    return this._state.find(function(obj){return obj.get('slug') === slug});
   }
 
   getScore(slug){
-    var qgs = _.map(this.skills, 'question_generators')
-    var merged = [].concat.apply([], qgs);
-    var qg = _.find(merged, {'slug': slug}) 
-    return _.pick(qg, ['complete', 'current_streak', 'highest_streak']);
+    var qgs = this._state.reduce(function(list,current){
+     return list.concat(current.get('question_generators'))
+    }, Immutable.List());
+    var qg = qgs.find(function(obj){
+      return obj.get('slug') === slug
+    });
+    function keyIn(...keys) {
+      var keySet = Immutable.Set(keys); 
+      return function (v, k) {
+        return keySet.has(k);
+      }
+    }
+    return qg.filter(keyIn('complete', 'current_streak', 'highest_streak'));
+
   }
 
-  handleActions(action){
+  reduce(state, action){
     switch(action.type){
       case "RECEIVE_SKILLS": {
-        this.skills = action.skills
-        this.emit("change")
-        break
+        return Immutable.fromJS(action.skills)
       }
       case "UPDATE_SCORE": {
-        var skill_index = _.indexOf(this.skills, _.find(this.skills, {slug: action.skill_slug}));
-        var qgs = this.skills[skill_index]['question_generators']
-        var qg_index = _.indexOf(qgs, _.find(qgs, {slug: action.qg_slug}));
-        _.assign(this.skills[skill_index]['question_generators'][qg_index], action.score);
-        this.emit("change")
-        break
+        var skill_index = state.findIndex(function(skill){
+          return skill.get('slug') === action.skill_slug
+        });
+       
+        var skill = state.get(skill_index)
+        var qg_index = skill.get('question_generators').findIndex(function(qg){
+          return qg.get('slug') === action.qg_slug
+}); 
+        return state.mergeIn([skill_index, 'question_generators', qg_index], Immutable.fromJS(action.score));
+
       } 
       default: {
-        break
+        return state; 
       }
     }
   }
 }
 
 const skillStore = new SkillStore()
-dispatcher.register(skillStore.handleActions.bind(skillStore));
 
 export default skillStore;

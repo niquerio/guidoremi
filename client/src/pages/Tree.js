@@ -7,20 +7,20 @@ export default class Tree extends React.Component {
     super();
     this.getTree = this.getTree.bind(this);
     this.state = {
-      tree: TreeStore.getTree(),
+      tree: TreeStore.getState(),
     };
   }
   componentWillMount(){
-    TreeStore.on("change", this.getTree ) 
+    this.listener = TreeStore.addListener(this.getTree ) 
   }
 
   componentWillUnmount(){
-    TreeStore.removeListener("change", this.getTree) 
+    this.listener.remove();
   }
 
   getTree(){
     this.setState({
-      tree: TreeStore.getTree(),
+      tree: TreeStore.getState(),
     });      
   }
   render() {

@@ -1,36 +1,31 @@
-import {EventEmitter} from "events";
-//import * as UserActions from '../actions/UserActions'
+import Immutable from 'immutable'; 
+import {ReduceStore} from 'flux/utils';
 import dispatcher from '../dispatcher';
-import _ from 'lodash'
 
-class UserStore extends EventEmitter{
+class UserStore extends ReduceStore{
   constructor(){
-    super();
-    this.user = {}
+    super(dispatcher);
   }
 
-
-  getUser(){
-    return this.user
+  getInitialState(){
+    return Immutable.Map(); 
   }
+
   signedIn(){
-    return !(_.isEmpty(this.user))
+    return !(this._state.isEmpty())
   }
 
-  handleActions(action){
+  reduce(state, action){
     switch(action.type){
       case "RECEIVE_USER":{
-        this.user = _.clone(action.user, true);
-        this.emit("change");
-        break
+        return Immutable.fromJS(action.user)
       }
       case "SIGN_OUT_USER":{
-        this.user = {}
-        this.emit("change")
-        break
+        
+        return state.clear();
       }
       default: {
-        break
+        return state;
       }
     }
   }
@@ -38,6 +33,5 @@ class UserStore extends EventEmitter{
 
 
 const userStore = new UserStore()
-dispatcher.register(userStore.handleActions.bind(userStore));
 
 export default userStore;
